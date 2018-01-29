@@ -78,9 +78,9 @@ var ViewPager = React.createClass({
           vx = gestureState.vx;
 
       var step = 0;
-      if (relativeGestureDistance < -0.5) {
+      if (relativeGestureDistance < -0.3) {
         step = 1;
-      } else if (relativeGestureDistance > 0.5) {
+      } else if (relativeGestureDistance > 0.3) {
         step = -1;
       }
 
@@ -92,7 +92,7 @@ var ViewPager = React.createClass({
     this._panResponder = PanResponder.create({
       // Claim responder if it's a horizontal pan
       onMoveShouldSetPanResponder: (e, gestureState) => {
-        if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
+        if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 30) {
           if (/* (gestureState.moveX <= this.props.edgeHitWidth ||
               gestureState.moveX >= deviceWidth - this.props.edgeHitWidth) && */
                 this.props.locked !== true && !this.fling) {
@@ -100,6 +100,19 @@ var ViewPager = React.createClass({
             return true;
           }
         }
+
+        return false;
+      },
+      onStartShouldSetPanResponderCapture: (e, gestureState) => {
+        this.lastX = gestureState.moveX;
+        this.lastY = gestureState.moveY;
+        return false;
+      },
+      onMoveShouldSetPanResponderCapture: (e, gestureState) => {
+        if (Math.abs(gestureState.dx) < Math.abs(gestureState.dy)) return false;
+        if ((gestureState.dx === 0) && (gestureState.dy === 0))   return false;
+        return Math.abs(gestureState.dx) > 20
+        return (Math.abs(this.lastX - gestureState.moveX) > 20);
       },
 
       // Touch is released, scroll to the one that you're closest to
@@ -172,7 +185,6 @@ var ViewPager = React.createClass({
 
     var pageCount = this.props.dataSource.getPageCount();
     if (pageNumber < 0 || pageNumber >= pageCount) {
-      console.error('Invalid page number: ', pageNumber);
       return
     }
 
