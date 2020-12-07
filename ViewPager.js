@@ -39,6 +39,7 @@ var ViewPager = createReactClass({
     ]),
     isLoop: PropTypes.bool,
     locked: PropTypes.bool,
+    disableBack: PropTypes.bool,
     autoPlay: PropTypes.bool,
     animation: PropTypes.func,
     initialPage: PropTypes.number,
@@ -50,6 +51,7 @@ var ViewPager = createReactClass({
     return {
       isLoop: false,
       locked: false,
+      disableBack: false,
       animation: function(animate, toValue, gs) {
         return Animated.spring(animate,
           {
@@ -193,6 +195,10 @@ var ViewPager = createReactClass({
   },
 
   movePage(step, gs, animate = true) {
+    if (this.props.disableBack && step < 0) {
+      return;
+    }
+
     var pageCount = this.props.dataSource.getPageCount();
     var pageNumber = this.state.currentPage + step;
     if (this.props.isLoop) {
