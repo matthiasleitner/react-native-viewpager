@@ -94,10 +94,6 @@ var ViewPager = createReactClass({
     this._panResponder = PanResponder.create({
       // Claim responder if it's a horizontal pan
       onMoveShouldSetPanResponder: (e, gestureState) => {
-
-        if (this.props.locked || this.props.disableBack) {
-          return false;
-        }
         if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 30) {
           if (/* (gestureState.moveX <= this.props.edgeHitWidth ||
               gestureState.moveX >= deviceWidth - this.props.edgeHitWidth) && */
@@ -129,6 +125,10 @@ var ViewPager = createReactClass({
       onPanResponderMove: (e, gestureState) => {
         var dx = gestureState.dx;
         var offsetX = -dx / this.state.viewWidth + this.childIndex;
+
+        if (this.props.disableBack && gestureState.dx > 0) {
+          return;
+        }
         this.state.scrollValue.setValue(offsetX);
       },
     });
