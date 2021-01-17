@@ -75,7 +75,7 @@ var ViewPager = createReactClass({
     this.childIndex = 0;
 
     var release = (e, gestureState) => {
-      var relativeGestureDistance = gestureState.dx / (Math.min(deviceWidth, 1000),
+      var relativeGestureDistance = gestureState.dx / Math.min(deviceWidth, 1000),
           //lastPageIndex = this.props.children.length - 1,
           vx = gestureState.vx;
 
