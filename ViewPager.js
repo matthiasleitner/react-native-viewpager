@@ -199,7 +199,7 @@ var ViewPager = createReactClass({
   },
 
   movePage(step, gs, animate = true) {
-    if (this.props.locked || (this.props.disableBack && step < 0)) {
+    if (this.props.disableBack && step < 0) {
       return;
     }
 
