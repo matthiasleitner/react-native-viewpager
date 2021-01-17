@@ -126,7 +126,7 @@ var ViewPager = createReactClass({
         var dx = gestureState.dx;
         var offsetX = -dx / this.state.viewWidth + this.childIndex;
 
-        if (this.props.disableBack && gestureState.dx > 0) {
+        if (this.props.locked || (this.props.disableBack && gestureState.dx > 0)) {
           return;
         }
         this.state.scrollValue.setValue(offsetX);
@@ -199,7 +199,7 @@ var ViewPager = createReactClass({
   },
 
   movePage(step, gs, animate = true) {
-    if (this.props.disableBack && step < 0) {
+    if (this.props.locked || (this.props.disableBack && step < 0)) {
       return;
     }
 
