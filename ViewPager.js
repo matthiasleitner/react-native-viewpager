@@ -88,6 +88,9 @@ var ViewPager = createReactClass({
 
       this.props.hasTouch && this.props.hasTouch(false);
 
+      if (this.props.locked) {
+        return;
+      }
       this.movePage(step, gestureState);
     }
 
